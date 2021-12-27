@@ -1,0 +1,13 @@
+**********************************************************************************
+
+ IAW AFMAN33-152 Para 2.3.1 All authorized IS users will sign the standardized AF Form 4394, Air Force User  Agreement Statement-Notice and Consent Provision prior to initial IS access and submit to the organization IAO with  a digital signature. Only one AF Form 4394 is required per user as maintained by the organization IAO regardless of  the number of system access requests inside or outside the organization.
+
+ Additional Information
+ IAW AFMAN33-282 Para 4.2.2.1 All authorized IS (to include Mobile Computing Devices) users will sign the  standardized AF Form 4394, Air Force User Agreement Statement-Notice and Consent Provision (See AFI 33-100, to  become AFMAN 33-152) prior to initial IS access.
+ 
+
+ All Civilians, Contractors, and Military that have not completed AF
+ Form 4394 will have their network access restricted pending
+ form completion.
+
+ 

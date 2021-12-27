@@ -1,0 +1,39 @@
+<html>
+    <HTA:APPLICATION 
+        Caption="no"
+    >
+
+    <script language = "VBScript">
+
+	Sub Window_Onload
+		window.resizeTo 800,600
+        	strComputer = "."
+		Set objWMIService = GetObject("winmgmts:\\" & strComputer & "\root\cimv2")
+		Set colItems = objWMIService.ExecQuery("Select * From Win32_DesktopMonitor")
+		For Each objItem in colItems
+			intHorizontal = objItem.ScreenWidth
+			intVertical = objItem.ScreenHeight
+		Next
+		window.moveTo Screen.Width /2 - 800, Screen.Height /2 - 600
+	End Sub
+
+        Sub PausedSection
+            window.close
+        End Sub
+
+	Sub CloseWindow
+	   self.close
+	End Sub
+
+    </script>
+
+    <body bgcolor="teal">
+	<h><font size=12><b>SAPR</b></font></h>
+	<br>
+
+	<p><font color="white" size=5><b>(July 22)</b> Excellence in All We Do: Every Airman must strive for continual improvement in self and service. We must all work together to successfully reach our common goals in an atmosphere that is free from fear and preserves individual self-worth. It is our responsibility to acknowledge and act immediately when we observe misconduct - even if the personal cost is high. Genuine respect involves viewing others as individuals of fundamental worth and working together with mutual respect to maximize the Air Force team effort.</font></p>
+
+	<input type="button" value="Acknowledge" name="run_button"  onClick="PausedSection">
+
+    </body>
+</html>

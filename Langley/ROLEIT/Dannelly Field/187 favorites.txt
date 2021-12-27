@@ -1,0 +1,181 @@
+'===================================================================================================================================='
+'       	   This Script MAPS IE Favorites.                   '
+'===================================================================================================================================='
+'Created by SMSgt Stephen Zimmer
+
+Option Explicit
+'On Error Resume Next
+
+Dim objNetwork
+Dim sstrFolder
+Dim sstrFolder1
+Dim sstrFolder10
+Dim strDomain
+Dim strUser
+Dim sWshShell
+Dim sobjFSO
+Dim startPage
+Dim sstrPath
+Dim sobjShortcutUrl
+Dim sstrSubFolder
+Dim sstrSubFolder1
+'Dim sstrSubFolder2
+
+
+Set sWshShell = CreateObject("WScript.Shell")  
+Set objNetwork = CreateObject("WScript.Network")
+Set sobjFSO = CreateObject("Scripting.FileSystemObject")
+
+strDomain = objNetwork.UserDomain
+strUser = objNetwork.UserName
+
+'=================================================================================================================================='
+'"VARIABLES FOR INTERNET EXPLORER"
+'=================================================================================================================================='
+
+startPage = "https://www.my.af.mil/"
+sstrPath = sWshShell.SpecialFolders("Favorites")
+sstrFolder = "187 FW Common Links"
+sstrFolder1 = "187 FW Training"
+
+
+'================================================================================================================================='
+'"SET HOME PAGE REGISTRY KEYS FOR ALL USERS"
+'================================================================================================================================='
+
+'sWshShell.RegWrite "HKLM\Software\Microsoft\Internet Explorer\Main\Start Page", StartPage
+sWshShell.RegWrite "HKCU\Software\Microsoft\Internet Explorer\Main\Start Page", StartPage
+
+'================================================================================================================================='
+   
+'Deletes Existing "187 FW Common Links"
+	If sobjFSO.FolderExists(sstrPath & "\" & sstrFolder) Then
+		sobjFSO.DeleteFolder(sstrPath & "\" & sstrFolder)
+		End If
+
+'Creates new "187 FW Common Links"
+	If Not sobjFSO.FolderExists(sstrPath & "\" & sstrFolder) Then
+	sobjFSO.CreateFolder(sstrPath & "\" & sstrFolder)
+
+		set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder & "\" & "AROWS.url")
+		  sobjShortcutUrl.TargetPath = "https://arows.sscno.nmci.navy.mil/arows/secure/login.jsp"
+		  sobjShortcutUrl.save
+		set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder & "\" & "DTS.url")
+		  sobjShortcutUrl.TargetPath = "https://www.defensetravel.osd.mil/"
+		  sobjShortcutUrl.save
+		set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder & "\" & "MICT.url")
+		  sobjShortcutUrl.TargetPath = "https://mict.us.af.mil/"
+		  sobjShortcutUrl.save
+		set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder & "\" & "MyPay.url")
+		  sobjShortcutUrl.TargetPath = "https://mypay.dfas.mil/mypay.aspx"
+		  sobjShortcutUrl.save
+		set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder & "\" & "ATAAPS.url")
+		  sobjShortcutUrl.TargetPath = "https://af.ataaps.csd.disa.mil/"
+		  sobjShortcutUrl.save
+		set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder & "\" & "MYPers.url")
+		  sobjShortcutUrl.TargetPath = "https://mypers.af.mil/"
+		  sobjShortcutUrl.save
+		set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder & "\" & "DCPDS Portal (myBiz, myWorkplace).url")
+		  sobjShortcutUrl.TargetPath = "https://compo.dcpds.cpms.osd.mil/"
+		  sobjShortcutUrl.save
+		set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder & "\" & "187 FW SharePoint GKO.url")
+		  sobjShortcutUrl.TargetPath = "https://gko.portal.ng.mil/states/AL/ANG/187FW/SitePages/Home.aspx"
+		  sobjShortcutUrl.save
+		set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder & "\" & "CitiBank.url")
+		  sobjShortcutUrl.TargetPath = "https://home.cards.citidirect.com/CommercialCard/Cards.html?classic=2"
+		  sobjShortcutUrl.save
+		set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder & "\" & "Defense Collaboration Services (DCS).url")
+		  sobjShortcutUrl.TargetPath = "https://disa.deps.mil/disa/org/ES7/DCS/SitePages/Home.aspx"
+		  sobjShortcutUrl.save
+		set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder & "\" & "LeaveWeb.url")
+		  sobjShortcutUrl.TargetPath = "https://www.my.af.mil/leavewebprod/profile"
+		  sobjShortcutUrl.save
+		set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder & "\" & "CAC User Maintenance Portal.url")
+		  sobjShortcutUrl.TargetPath = "https://www.dmdc.osd.mil/self_service/"
+		  sobjShortcutUrl.save
+		set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder & "\" & "Outlook Web Access (OWA).url")
+		  sobjShortcutUrl.TargetPath = "https://webmail.apps.mil/owa/us.af.mil/"
+		  sobjShortcutUrl.save    
+		set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder & "\" & "milConnect.url")
+		  sobjShortcutUrl.TargetPath = "https://www.dmdc.osd.mil/milconnect/"
+		  sobjShortcutUrl.save 
+		set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder & "\" & "DM-Force Support Squadron.url")
+		  sobjShortcutUrl.TargetPath = "http://dmforcesupport.com/"
+		  sobjShortcutUrl.save
+		set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder & "\" & "AFDS-User Self Service.url")
+		  sobjShortcutUrl.TargetPath = "https://imp.afds.af.mil/"
+		  sobjShortcutUrl.save
+		set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder & "\" & "IGEMS.url")
+		  sobjShortcutUrl.TargetPath = "https://igems.hill.af.mil/igems/home.do"
+		  sobjShortcutUrl.save
+		set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder & "\" & "ALNG Human Resources.url")
+		  sobjShortcutUrl.TargetPath = "http://www.al.ngb.army.mil/Careers/HRO/default.aspx"
+		  sobjShortcutUrl.save
+		set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder & "\" & "AF Portal.url")
+		  sobjShortcutUrl.TargetPath = "https://www.my.af.mil/gcss-af/USAF/ep/home.do"
+		  sobjShortcutUrl.save
+		set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder & "\" & "ASIMS MyIMR.url")
+		  sobjShortcutUrl.TargetPath = "https://asimsimr.health.mil/imr/myimr.aspx"
+		  sobjShortcutUrl.save		
+		set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder & "\" & "ePEX.url")
+		  sobjShortcutUrl.TargetPath = "http://fakz-pex-001v/epex"
+		  sobjShortcutUrl.save				  
+		  End If
+
+
+'Deletes Existing "187 FW Training"	
+	If sobjFSO.FolderExists(sstrPath & "\" & sstrFolder1) Then
+		sobjFSO.DeleteFolder(sstrPath & "\" & sstrFolder1)
+		End If
+
+'Creates new "187 FW Training" 
+	If Not sobjFSO.FolderExists(sstrPath & "\" & sstrFolder1) Then
+	      	sobjFSO.CreateFolder(sstrPath & "\" & sstrFolder1)
+
+		set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder1 & "\" & "ARCNet.url")
+		  sobjShortcutUrl.TargetPath = "https://www.my.af.mil/arcnetprod/resnet/classic/home.asp"
+		  sobjShortcutUrl.save
+	      	Set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder1 & "\" & "MILPDS.url")
+		  sobjShortcutUrl.TargetPath = "https://www-pds.afpc.randolph.af.mil/Citrix/OW/auth/preLoginMessage.aspx"
+		  sobjShortcutUrl.Save
+   	   	Set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder1 & "\" & "FedVTE.url")
+		  sobjShortcutUrl.TargetPath = "https://fedvte.usalearning.gov/"
+		  sobjShortcutUrl.Save
+   	      	Set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder1 & "\" & "ADLS.url")
+		  sobjShortcutUrl.TargetPath = "https://golearn.csd.disa.mil/kc/login/login.asp"
+		  sobjShortcutUrl.Save
+		Set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder1 & "\" & "ETCA.url")
+		  sobjShortcutUrl.TargetPath = "https://etca.randolph.af.mil/"
+		  sobjShortcutUrl.Save
+		Set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder1 & "\" & "TEAMS.url")
+		  sobjShortcutUrl.TargetPath = "http://access.afpc.af.mil/"
+		  sobjShortcutUrl.Save
+		Set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder1 & "\" & "AU CDC LOGIN.url")
+		  sobjShortcutUrl.TargetPath = "https://au.csd.disa.mil/kc/login/login.asp?kc_ident=kc0012&blnAccess=TRUE"
+		  sobjShortcutUrl.Save
+		Set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder1 & "\" & "AU PORTAL.url")
+		  sobjShortcutUrl.TargetPath = "https://auportal.maxwell.af.mil/auportal/sec/welcome.AirUniversity"
+		  sobjShortcutUrl.Save
+		set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder1 & "\" & "TBA.url")
+		  sobjShortcutUrl.TargetPath = "https://www.my.af.mil/imdsltpa-tba/IMDSTWeb/ActionServlet"
+		  sobjShortcutUrl.save	
+		set sobjShortcutUrl = sWshShell.CreateShortcut(sstrPath & "\" & sstrFolder1 & "\" & "AFVEC.url")
+		  sobjShortcutUrl.TargetPath = "https://afvec.us.af.mil/afvec/Home.aspx"
+		  sobjShortcutUrl.save						
+   	   	End If
+
+'Clear Memory		
+Set objNetwork = Nothing
+Set sstrFolder = Nothing
+Set sstrFolder1 = Nothing
+Set sstrFolder10 = Nothing
+Set strDomain = Nothing
+Set strUser = Nothing
+Set sWshShell = Nothing
+Set sobjFSO = Nothing
+Set startPage = Nothing
+Set sstrPath = Nothing
+Set sobjShortcutUrl = Nothing
+Set sstrSubFolder = Nothing
+Set sstrSubFolder1 = Nothing
+'Set sstrSubFolder2 = Nothing

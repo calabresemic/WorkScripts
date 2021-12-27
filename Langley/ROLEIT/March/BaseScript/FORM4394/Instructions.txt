@@ -1,0 +1,29 @@
+<P ALIGN=Center>
+*************************************<br>
+***<font size="4" color="blue"> READ ALL INSTRUCTIONS FIRST !! </font> ***<br>
+**************************************<br>
+</P>
+<P ALIGN=Left>
+<br>
+1.  READ AGREEMENT  <br>
+2.  BLOCK 1 FILL IN NAME.<br>
+3.  BLOCK 2 CHECK: CIV, MIL or CTR.<br>
+4.  BLOCK 4 ENTER DATE <br>
+5.  BLOCK 3 DIGITALLY SIGN FORM LAST.<br>
+6.  SELECT A CERT WITH YOUR EDIPI <br>
+7.  IF CERT FAILS, TRY ANOTHER <br>
+8.  IF SIGNATURE IS VALID, CLICK OK.<br>
+9.  CLICK SAVE, NOT SAVE AS.<br>
+10. WAIT UNTIL YOU ARE PROMPTED THAT THE FORM HAS BEEN SAVED.<br>
+11. CLICK CLOSE BUTTON<br>
+12. IF COMPLETED CORRECTLY, THE FORM WILL NOT APPEAR AGAIN.<br>
+
+<br>
+<P ALIGN=Center>
+	Continue the Logon Process <br>
+<br>
+<P ALIGN=Left>
+<font size="3">Note: If you do not complete the form correctly, you will be logged off.</font>  <br>
+
+</P>
+

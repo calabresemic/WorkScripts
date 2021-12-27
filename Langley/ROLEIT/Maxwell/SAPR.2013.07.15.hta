@@ -1,0 +1,39 @@
+<html>
+    <HTA:APPLICATION 
+        Caption="no"
+    >
+
+    <script language = "VBScript">
+
+	Sub Window_Onload
+		window.resizeTo 800,600
+        	strComputer = "."
+		Set objWMIService = GetObject("winmgmts:\\" & strComputer & "\root\cimv2")
+		Set colItems = objWMIService.ExecQuery("Select * From Win32_DesktopMonitor")
+		For Each objItem in colItems
+			intHorizontal = objItem.ScreenWidth
+			intVertical = objItem.ScreenHeight
+		Next
+		window.moveTo Screen.Width /2 - 800, Screen.Height /2 - 600
+	End Sub
+
+        Sub PausedSection
+            window.close
+        End Sub
+
+	Sub CloseWindow
+	   self.close
+	End Sub
+
+    </script>
+
+    <body bgcolor="teal">
+	<h><font size=12><b>SAPR</b></font></h>
+	<br>
+
+	<p><font color="white" size=5><b>(July 15)</b> Service Before Self: An Airman's professional duties always take precedence over his personal desires. It is her professional responsibility to acknowledge and act immediately when she observes misconduct - even if the personal cost might be high. Not "liking" conflict is not an excuse. A good leader places her people ahead of her personal comfort and does not indulge in self-pity, discouragement, anger, frustration or defeatism.</font></p>
+
+	<input type="button" value="Acknowledge" name="run_button"  onClick="PausedSection">
+
+    </body>
+</html>

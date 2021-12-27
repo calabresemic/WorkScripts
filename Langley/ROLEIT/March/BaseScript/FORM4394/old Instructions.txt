@@ -1,0 +1,30 @@
+<P ALIGN=Center>
+*************************************<br>
+***<font size="4" color="blue"> Please Follow All Instructions</font> ***<br>
+**************************************<br>
+</P>
+<P ALIGN=Left>
+<br>
+1.  Read Agreement  <br>
+2.  Fill in name in LAST, FIRST, Middle format.<br>
+3.  Select Status (all that apply): CIV, Military, Contractor.<br>
+4.  Enter Date in YYYYMMDD format<br>
+5.  Click User Signature button to digitally sign document.<br>
+6.  Digital User Signature Viewer Appears<br>
+7.  Click Sign button<br>
+8.  Your Signature Identify box appears.<br>
+9.  Select a certificate that contains your EDIPI number.<br>
+10. If certificate fails, try alternate one.<br>
+11. If signature is Valid, Click OK<br>
+12. Click Save (NOT SAVE AS).<br>
+13. Wait until you are prompted that the document has been saved. <br>
+14. Click the Close button near the top of the form.<br>
+15. If you correctly fill out the form, you will not be prompted again.<br>
+<br>
+<P ALIGN=Center>
+	Continue the Logon Process <br>
+<br>
+<P ALIGN=Left>
+<font size="3">Note: If you do not complete the form correctly, you will be logged off.</font>  <br>
+
+</P>

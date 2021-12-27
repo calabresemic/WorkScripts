@@ -1,0 +1,39 @@
+<html>
+    <HTA:APPLICATION 
+        Caption="no"
+    >
+
+    <script language = "VBScript">
+
+	Sub Window_Onload
+		window.resizeTo 800,600
+        	strComputer = "."
+		Set objWMIService = GetObject("winmgmts:\\" & strComputer & "\root\cimv2")
+		Set colItems = objWMIService.ExecQuery("Select * From Win32_DesktopMonitor")
+		For Each objItem in colItems
+			intHorizontal = objItem.ScreenWidth
+			intVertical = objItem.ScreenHeight
+		Next
+		window.moveTo Screen.Width /2 - 800, Screen.Height /2 - 600
+	End Sub
+
+        Sub PausedSection
+            window.close
+        End Sub
+
+	Sub CloseWindow
+	   self.close
+	End Sub
+
+    </script>
+
+    <body bgcolor="teal">
+	<h><font size=12><b>SAPR</b></font></h>
+	<br>
+
+	<p><font color="white" size=5>Integrity First: Our first core value and basis for the bond common to all Airmen. It is our ability to act on our convictions, control our impulses and do what is right even when no one is looking. It is our courage in humbly correcting our Wingman when her actions or words are offensive or dishonest. It is our responsibility to acknowledge and act immediately when we observe misconduct - even if the personal cost is high. A person of integrity grasps and is sobered by the awesome task of defending his Wingman as he does the Constitution of the United States of America.</font></p>
+
+	<input type="button" value="Acknowledge" name="run_button"  onClick="CloseWindow">
+
+    </body>
+</html>

@@ -1,0 +1,235 @@
+' FileName:   DannellyFieldAllUserLoginScript.vbs
+' Usage:       for login by all BASE AFB to Area52 domain
+
+'----------------------------------------------------------------------------------------
+' Variable declaration/definition
+'----------------------------------------------------------------------------------------
+Option Explicit
+
+'On Error Resume Next
+
+
+Dim blnIsMember		'Boolean for group membership TRUE/FALSE
+Dim objSysInfo		'Returns AD System Information
+Dim objUser		'Sets user object variable
+Dim objUser2		'Sets user object variable
+Dim objWSH
+Dim objShell		'Creates Windows Shell Object
+Dim objFSO		'Creates Windows File System Object
+Dim objNet
+Dim objNetwork
+Dim objGroup
+Dim strScriptPath	
+Dim strUserDN		'Variable to hold user Distinguished Name
+Dim strUserID
+Dim strUserCN		'String representing users CN
+Dim strDomain
+Dim strGroupName
+Dim strLetter
+Dim strUNC
+Dim intWSHVersion
+
+
+'----------------------------------------------------------------------------------------
+' Collect user account information
+'----------------------------------------------------------------------------------------
+Set objSysInfo = CreateObject("ADSystemInfo")
+strUserDN = objSysInfo.UserName
+strUserDN = Replace(strUserDN, "/", "\/")
+Set objUser = GetObject("LDAP://" & strUserDN)
+strUserCN = objUser.cn
+
+' Initialize system objects
+set objWSH = createobject("WScript.shell")
+set objFSO = createobject("Scripting.FileSystemObject")
+Set objNetwork = CreateObject("WScript.Network")
+
+'on error resume next
+
+'***Shared Drive Mappings For all Base Users***
+
+'MapDrive "x:","\\xxxxxx\xxxxx"
+MapDrive "G:","\\FAKZ-FS-02\PROGRAMS$"
+MapDrive "P:","\\FAKZ-FS-02\FILES$"
+MapDrive "S:","\\FAKZ-FS-01\REMS"
+MapDrive "X:","\\FAKZ-FS-02\187FW_ORI"
+
+
+
+If IsMemberOf("187 FW 187CF") Then		
+     Mapdrive "M:","\\FAKZ-FS-001P\SOFTWARE"		
+     Mapdrive "N:","\\FAKZ-FS-001P\NCC SOFTWARE"			
+     Mapdrive "Y:","\\FAKZ-FS-001P\187-CF"	
+End If
+
+If IsMemberOf("187 FW 187_1stSgt") Then		
+     Mapdrive "F:","\\FAKZ-FS-02\187CCF"	
+End If
+
+If IsMemberOf("187 FW ALCERFP") Then		
+     Mapdrive "H:","\\QQSN-FS-001V\ALCERFP\FILES"	
+End If
+
+If IsMemberOf("USG_187 FW_USM") Then		
+     Mapdrive "I:","\\FAKZ-FS-02\IP\03 Unit Security Managers Folder"	
+End If
+
+If IsMemberOf("USG_187 FW_IG Share Drive") Then		
+     Mapdrive "I:","\\FAKZ-FS-02\187FW IG"	
+End If
+
+If IsMemberOf("187 FW FW_IP") Then		
+     Mapdrive "I:","\\FAKZ-FS-02\IP"	
+End If
+
+If IsMemberOf("187 FW 187CES") Then		
+     Mapdrive "J:","\\FAKZ-FS-001P\CES"	
+End If
+
+If IsMemberOf("187 FW 187FM") Then		
+     Mapdrive "J:","\\FAKZ-FS-02\Finance"	
+End If
+
+If IsMemberOf("187 FW 226CCG") Then		
+     Mapdrive "J:","\\QQSN-FS-001V\226CCG\Files"
+End If
+
+If IsMemberOf("187 FW 232CBCS") Then		
+     Mapdrive "J:","\\QQSN-FS-001V\232CBCS\Files"
+End If
+
+If IsMemberOf("187 FW 280CBCS") Then		
+     Mapdrive "J:","\\FJMG-FS-001V\Files"	
+End If
+
+If IsMemberOf("187 FW 187MSF") Then		
+     Mapdrive "K:","\\FAKZ-FS-02\FSS"
+End If
+
+If IsMemberOf("USG_187 FW_187SE") Then		
+     Mapdrive "K:","\\FAKZ-FS-02\187FW_SE"
+End If
+
+If IsMemberOf("187 FW 187MSC") Then		
+     Mapdrive "M:","\\FAKZ-FS-02\187MSC"	
+End If
+
+If IsMemberOf("187 FW 187OG") Then		
+     Mapdrive "O:","\\FAKZ-FS-001P\OPS_NAS"	
+End If
+
+If IsMemberOf("187 FW FW_EO") Then		
+     Mapdrive "O:","\\FAKZ-FS-02\187 EO"	
+End If
+
+If IsMemberOf("187FW MXG_QA") Then		
+     Mapdrive "Q:","\\FAKZ-FS-001P\QA_Files"	
+End If
+
+If IsMemberOf("USG_187MXG_Supervisors") Then		
+     Mapdrive "R:","\\FAKZ-FS-001P\QuAD_DB"	
+End If
+
+If IsMemberOf("187 FW CSS") Then		
+     Mapdrive "T:","\\FAKZ-FS-02\CSS"
+End If
+
+If IsMemberOf("187 FW UTM") Then		
+     Mapdrive "U:","\\FAKZ-FS-02\187FW_UTM"	
+End If
+
+If IsMemberOf("187 FW CCs") Then		
+     Mapdrive "U:","\\FAKZ-FS-02\187FW_UTM"	
+End If
+
+If IsMemberOf("187 FW Chiefs") Then		
+     Mapdrive "U:","\\FAKZ-FS-02\187FW_UTM"	
+End If
+
+If IsMemberOf("187 FW VCO Write") Then		
+     Mapdrive "V:","\\FAKZ-FS-02\VCO"
+End If
+
+If IsMemberOf("USG_187 MSG_187 MCA") Then		
+     Mapdrive "W:","\\FAKZ-FS-02\187MCA"
+End If
+
+If IsMemberOf("187 FW 187MDS") Then		
+     Mapdrive "Y:","\\FAKZ-FS-02\187MDG"
+End If
+
+If IsMemberOf("187 FW 187PA") Then		
+     Mapdrive "Y:","\\FAKZ-FS-02\187th-Multimedia"
+End If
+
+If IsMemberOf("187 FW 187SFS") Then		
+     Mapdrive "Z:","\\FAKZ-FS-02\SFS"
+End If
+MsgBox("ALL USER SCRIPT SUCCESSFUL!")
+
+
+Set objFSO = CreateObject("Scripting.FileSystemObject")
+Set objShell = WScript.CreateObject("WScript.Shell")
+
+'MsgBox("Running Favorites Mappings")
+strScriptPath = "\\area52.afnoapps.usaf.mil\Dannelly_Field\Logon_Scripts\187favorites.vbs"
+
+If objFSO.fileExists(strScriptPath) Then
+
+
+	objShell.run strScriptPath,0
+End If
+
+ 'quit script
+Cleanup
+WScript.quit 0
+
+
+'--------------------------------------------
+' SUBROUTINES & FUNCTIONS
+'--------------------------------------------
+
+sub Cleanup()
+' release memory
+	set blnIsMember	  = Nothing
+	set strUserID     = Nothing
+	set strDomain     = Nothing
+	set strGroupName  = Nothing
+	set strLetter     = Nothing
+	set strUNC        = Nothing
+	set intWSHVersion = Nothing
+        set objWSH        = Nothing
+        set objFSO        = Nothing
+        set objNet        = Nothing
+        set objNetwork    = Nothing
+        set objUser       = Nothing
+        set objUser2      = Nothing
+        set objGroup      = Nothing
+end sub
+
+
+Sub MapDrive(strLetter, strUNC)
+  Set objNet = WScript.CreateObject("WScript.Network") 
+  If objFSO.DriveExists(strLetter) Then
+    objNet.RemoveNetworkDrive strLetter, True, True
+  End If
+    
+    objNet.MapNetworkDrive strLetter, strUNC, True
+  
+End Sub
+
+
+Function IsMemberOf(strGroupName)
+  Set objNetwork = CreateObject("WScript.Network")
+  strDomain = objNetwork.UserDomain
+  strUserID = objNetwork.UserName
+  blnIsMember = False
+  Set objUser2 = GetObject("WinNT://" & strDomain & "/" & strUserID & ",user")
+  For Each objGroup In objUser2.Groups
+    If LCase(objGroup.Name) = LCase(strGroupName) Then
+      blnIsMember = True
+      Exit For
+    End If
+  Next
+  IsMemberOf = blnIsMember
+End Function
