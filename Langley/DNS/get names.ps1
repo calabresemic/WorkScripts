@@ -1,0 +1,2 @@
+﻿#
+((Get-DnsServerResourceRecord -Name "_ldap._tcp.0f81916b-b9e1-4c27-8ac0-3ce0a601e53c.domains._msdcs" -ZoneName "afnoapps.usaf.mil").recorddata.domainname | Group-Object | where count -eq 2).name.TrimEnd(".")
