@@ -1,0 +1,3 @@
+Copy the Andersen_Subnet_Coverage.csv from the ShareDrive into this folder then double click the Run_RSD shortcut to start the script.
+The window will open and tell you how many subnets are not covered then it will start background jobs to test those IPs.
+The script will tell you when all the jobs are complete.
