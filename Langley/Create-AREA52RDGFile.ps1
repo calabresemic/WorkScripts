@@ -1,4 +1,4 @@
-﻿#This will generate a new RDG file for the domain
+#This will generate a new RDG file for the domain
 #Created by Michael Calabrese (1468714589)
 
 Function Create-AREA52RDGFile {
@@ -7,280 +7,245 @@ Function Create-AREA52RDGFile {
     Param(
         [Parameter(Mandatory)]
         [String]$RDManFile
-        )
+    )
 
     #These functions were taken from RDCMan and modified to account for nested groups
     #https://www.powershellgallery.com/packages/RDCMan/1.0.0
 
-    function New-RDCManFile{
-  <#
-      .SYNOPSIS
-      Creates a new Remote Desktop Connection Manager File.
+    function New-RDCManFile {
+        <#
+        .SYNOPSIS
+        Creates a new Remote Desktop Connection Manager File.
 
-      .DESCRIPTION
-      Creates a new Remote Desktop Connection Manager File for version 2.7
-      which can then be modified.
-      .PARAMETER  FilePath
-      Input the path for the file you wish to Create.
+        .DESCRIPTION
+        Creates a new Remote Desktop Connection Manager File for version 2.7
+        which can then be modified.
+        .PARAMETER    FilePath
+        Input the path for the file you wish to Create.
 
-      .PARAMETER  Name
-      Input the name for the Structure within the file.
+        .PARAMETER    Name
+        Input the name for the Structure within the file.
 
-      .EXAMPLE
-      PS C:\> New-RDCManFile -FilePath .\Test.rdg -Name RDCMan
-      'If no output is generated the command was run successfully'
-      This example shows how to call the Name function with named parameters.
+        .EXAMPLE
+        PS C:\> New-RDCManFile -FilePath .\Test.rdg -Name RDCMan
+        'If no output is generated the command was run successfully'
+        This example shows how to call the Name function with named parameters.
 
 
-      .INPUTS
-      System.String
+        .INPUTS
+        System.String
 
-      .OUTPUTS
-      Null
-  #>
-  Param(
-    [Parameter(Mandatory = $true)]
-    [String]$FilePath,
-    
-    [Parameter(Mandatory = $true)]
-    [String]$Name,
+        .OUTPUTS
+        Null
+        #>
+        Param(
+            [Parameter(Mandatory = $true)]
+            [String]$FilePath,
+        
+            [Parameter(Mandatory = $true)]
+            [String]$Name,
 
-    [Parameter(Mandatory = $false)]
-    [Switch]$Force
-  )
-  BEGIN
-  {
-    [string]$template = @' 
+            [Parameter(Mandatory = $false)]
+            [Switch]$Force
+        )
+        BEGIN {
+        [string]$template = @' 
 <?xml version="1.0" encoding="utf-8"?>
 <RDCMan programVersion="2.81" schemaVersion="3">
-  <file>
-    <credentialsProfiles />
-    <properties>
-      <expanded>True</expanded>
-      <name></name>
-    </properties>
-    <displaySettings inherit="None">
-      <liveThumbnailUpdates>True</liveThumbnailUpdates>
-      <allowThumbnailSessionInteraction>False</allowThumbnailSessionInteraction>
-      <showDisconnectedThumbnails>True</showDisconnectedThumbnails>
-      <thumbnailScale>1</thumbnailScale>
-      <smartSizeDockedWindows>True</smartSizeDockedWindows>
-      <smartSizeUndockedWindows>True</smartSizeUndockedWindows>
-    </displaySettings>
-  </file>
-  <connected />
-  <favorites />
-  <recentlyUsed />
+    <file>
+        <credentialsProfiles />
+        <properties>
+            <expanded>True</expanded>
+            <name></name>
+        </properties>
+        <displaySettings inherit="None">
+            <liveThumbnailUpdates>True</liveThumbnailUpdates>
+            <allowThumbnailSessionInteraction>False</allowThumbnailSessionInteraction>
+            <showDisconnectedThumbnails>True</showDisconnectedThumbnails>
+            <thumbnailScale>1</thumbnailScale>
+            <smartSizeDockedWindows>True</smartSizeDockedWindows>
+            <smartSizeUndockedWindows>True</smartSizeUndockedWindows>
+        </displaySettings>
+    </file>
+    <connected />
+    <favorites />
+    <recentlyUsed />
 </RDCMan>
 '@ 
-    $FilePath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($FilePath)
-    if($Force -eq $true){Remove-Item $FilePath -Force -ErrorAction SilentlyContinue}
-    if(Test-Path -Path $FilePath){
-        Write-Error -Message 'File Already Exists'
+            $FilePath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($FilePath)
+            if($Force -eq $true){Remove-Item $FilePath -Force -ErrorAction SilentlyContinue}
+            if(Test-Path -Path $FilePath) {
+                Write-Error -Message 'File Already Exists'
+            } else {
+                $xml = New-Object -TypeName Xml
+                $xml.LoadXml($template)
+            }
         }
-    else{
-        $xml = New-Object -TypeName Xml
-        $xml.LoadXml($template)
-        }
-  }
-  PROCESS
-  {
-    $File = (@($xml.RDCMan.file.properties)[0]).Clone()
-    $File.Name = $Name
+        PROCESS {
+            $File = (@($xml.RDCMan.file.properties)[0]).Clone()
+            $File.Name = $Name
     
-    $xml.RDCMan.file.properties |
-    Where-Object -FilterScript {
-      $_.Name -eq ''
-    } |
-    ForEach-Object -Process {
-      [void]$xml.RDCMan.file.ReplaceChild($File,$_)
-    }
-  }
-  END
-  {
-    $xml.Save($FilePath)
-  }
-}
-
-    function New-RDCManGroup{
-  <#
-      .SYNOPSIS
-      Creates a new Group within your Remote Desktop Connection Manager File.
-
-      .DESCRIPTION
-      Creates a new Group within your Remote Desktop Connection Manager File for version 2.7.
-      which can then be modified.
-      .PARAMETER  FilePath
-      Input the path for the file you wish to Create.
-
-      .PARAMETER  Name
-      Input the name for the Group you wish to create within the file.
-
-      .EXAMPLE
-      PS C:\> New-RDCManGroup -FilePath .\Test.rdg -Name RDCMan
-      'If no output is generated the command was run successfully'
-      This example shows how to call the Name function with named parameters.
-
-
-      .INPUTS
-      System.String
-
-      .OUTPUTS
-      Null
-  #>
-  Param(
-    [Parameter(Mandatory = $true)]
-    [String]$FilePath,
-    
-    [Parameter(Mandatory = $false)]
-    [String]$ParentGroupName,
-
-    [Parameter(Mandatory = $true)]
-    [String]$Name
-  )
-  BEGIN
-  {
-    $FilePath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($FilePath)
-    if(Test-Path -Path $FilePath)
-    {
-      $xml = New-Object -TypeName XML
-      $xml.Load($FilePath)
-    } 
-    else
-    {
-      Write-Error -Exception $_.Exception
-      throw $_.Exception
-    }
-  }
-  PROCESS
-  {
-    $group = $xml.CreateElement('group')
-    $grouproperties = $xml.CreateElement('properties')
-      
-    $groupname = $xml.CreateElement('name')
-    $groupname.set_InnerXML($Name)
-      
-    $groupexpanded = $xml.CreateElement('expanded')
-    $groupexpanded.set_InnerXML('False')
-      
-    [void]$grouproperties.AppendChild($groupname)
-    [void]$grouproperties.AppendChild($groupexpanded)
-    [void]$group.AppendChild($grouproperties)
-
-    if($ParentGroupName){
-        $ParentGroup = @($xml.RDCMan.file.group) | Where-Object -FilterScript {$_.properties.name -eq $ParentGroupName}
-        [void]$ParentGroup.AppendChild($group)
+            $xml.RDCMan.file.properties | Where-Object -FilterScript {$_.Name -eq ''} | ForEach-Object -Process {
+                [void]$xml.RDCMan.file.ReplaceChild($File,$_)
+            }
         }
-    else{
-        [void]$xml.RDCMan.file.AppendChild($group)
+        END {
+            $xml.Save($FilePath)
         }
-  }
-  END
-  {
-    $xml.Save($FilePath)
-  }
-}
+    }
+
+    function New-RDCManGroup {
+        <#
+        .SYNOPSIS
+        Creates a new Group within your Remote Desktop Connection Manager File.
+
+        .DESCRIPTION
+        Creates a new Group within your Remote Desktop Connection Manager File for version 2.7.
+        which can then be modified.
+        .PARAMETER    FilePath
+        Input the path for the file you wish to Create.
+
+        .PARAMETER    Name
+        Input the name for the Group you wish to create within the file.
+
+        .EXAMPLE
+        PS C:\> New-RDCManGroup -FilePath .\Test.rdg -Name RDCMan
+        'If no output is generated the command was run successfully'
+        This example shows how to call the Name function with named parameters.
+
+        .INPUTS
+        System.String
+
+        .OUTPUTS
+        Null
+        #>
+        Param(
+            [Parameter(Mandatory = $true)]
+            [String]$FilePath,
+        
+            [Parameter(Mandatory = $false)]
+            [String]$ParentGroupName,
+
+            [Parameter(Mandatory = $true)]
+            [String]$Name
+        )
+        BEGIN {
+            $FilePath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($FilePath)
+            if(Test-Path -Path $FilePath) {
+                $xml = New-Object -TypeName XML
+                $xml.Load($FilePath)
+            } else {
+                Write-Error -Exception $_.Exception
+                throw $_.Exception
+            }
+        }
+        PROCESS {
+            $group = $xml.CreateElement('group')
+            $grouproperties = $xml.CreateElement('properties')
+            
+            $groupname = $xml.CreateElement('name')
+            $groupname.set_InnerXML($Name)
+            
+            $groupexpanded = $xml.CreateElement('expanded')
+            $groupexpanded.set_InnerXML('False')
+            
+            [void]$grouproperties.AppendChild($groupname)
+            [void]$grouproperties.AppendChild($groupexpanded)
+            [void]$group.AppendChild($grouproperties)
+
+            if($ParentGroupName) {
+                $ParentGroup = $xml.SelectNodes('//group') | Where-Object -FilterScript {$_.properties.name -eq $ParentGroupName}
+                [void]$ParentGroup.AppendChild($group)
+            } else {
+                [void]$xml.RDCMan.file.AppendChild($group)
+            }
+        }
+        END {
+            $xml.Save($FilePath)
+        }
+    }
 
     function New-RDCManServer{
-  <#
-      .SYNOPSIS
-      Creates a new Server within a group in your Remote Desktop Connection Manager File.
+        <#
+        .SYNOPSIS
+        Creates a new Server within a group in your Remote Desktop Connection Manager File.
 
-      .DESCRIPTION
-      Creates a new server within the  Remote Desktop Connection Manager File.
+        .DESCRIPTION
+        Creates a new server within the    Remote Desktop Connection Manager File.
 
-      .PARAMETER  FilePath
-      Input the path for the file you wish to append a new group.
+        .PARAMETER    FilePath
+        Input the path for the file you wish to append a new group.
 
-      .PARAMETER  DisplayName
-      Input the name DisplayName of the server.
-      
-      .PARAMETER  Server
-      Input the FQDN, IP Address or Hostname of the server.
+        .PARAMETER    DisplayName
+        Input the name DisplayName of the server.
+            
+        .PARAMETER    Server
+        Input the FQDN, IP Address or Hostname of the server.
 
-      .PARAMETER  GroupName
-      Input the name DisplayName of the server.
+        .PARAMETER    GroupName
+        Input the name DisplayName of the server.
 
-      .EXAMPLE
-      PS C:\> New-RDCManServer -FilePath .\Test.rdg -DisplayName RDCMan -Server '10.10.0.5' -Group Test
-      'If no output is generated the command was run successfully'
-      This example shows how to call the Name function with named parameters.
+        .EXAMPLE
+        PS C:\> New-RDCManServer -FilePath .\Test.rdg -DisplayName RDCMan -Server '10.10.0.5' -Group Test
+        'If no output is generated the command was run successfully'
+        This example shows how to call the Name function with named parameters.
 
-      .INPUTS
-      System.String
+        .INPUTS
+        System.String
 
-      .OUTPUTS
-      Null
-  #>
-  Param(
-    [Parameter(Mandatory = $true)]
-    [String]$FilePath,
+        .OUTPUTS
+        Null
+        #>
+        Param(
+            [Parameter(Mandatory = $true)]
+            [String]$FilePath,
 
-    [Parameter(Mandatory = $true)]
-    [String]$GroupName,
+            [Parameter(Mandatory = $true)]
+            [String]$GroupName,
 
-    [Parameter(Mandatory = $false)]
-    [String]$ParentGroupName,
+            [Parameter(Mandatory = $true)]
+            [String]$Server,
 
-    [Parameter(Mandatory = $true)]
-    [String]$Server,
+            [Parameter(Mandatory = $true)]
+            [String]$DisplayName
+        )
+        BEGIN {
+            $FilePath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($FilePath)
+            if(Test-Path -Path $FilePath) {
+                $xml = New-Object -TypeName XML
+                $xml.Load($FilePath)
+            } else {
+                Write-Error -Exception $_.Exception
+                throw $_.Exception
+            }
+        }
+        PROCESS {
+            $ServerNode = $xml.CreateElement('server')
+            $serverproperties = $xml.CreateElement('properties')
 
-    [Parameter(Mandatory = $true)]
-    [String]$DisplayName
-  )
-  BEGIN
-  {
-    $FilePath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($FilePath)
-    if(Test-Path -Path $FilePath)
-    {
-      $xml = New-Object -TypeName XML
-      $xml.Load($FilePath)
-    } 
-    else
-    {
-      Write-Error -Exception $_.Exception
-      throw $_.Exception
+            $servername = $xml.CreateElement('name')
+            $servername.set_InnerXML($Server)
+        
+            $serverdisplayname = $xml.CreateElement('displayName')
+            $serverdisplayname.set_InnerXML($DisplayName)
+        
+            [void]$serverproperties.AppendChild($servername)
+            [void]$serverproperties.AppendChild($serverdisplayname)
+
+            [void]$ServerNode.AppendChild($serverproperties)
+
+            $group = $xml.SelectNodes('//group') | Where-Object -FilterScript {
+                $_.properties.name -eq $groupname
+            }
+            [void]$group.AppendChild($ServerNode)
+        }
+        END {
+            $xml.Save($FilePath)
+        }
     }
-  }
-  PROCESS
-  {
-    $ServerNode = $xml.CreateElement('server')
-    $serverproperties = $xml.CreateElement('properties')
 
-    $servername = $xml.CreateElement('name')
-    $servername.set_InnerXML($Server)
-    
-    $serverdisplayname = $xml.CreateElement('displayName')
-    $serverdisplayname.set_InnerXML($DisplayName)
-    
-    [void]$serverproperties.AppendChild($servername)
-    [void]$serverproperties.AppendChild($serverdisplayname)
-
-    [void]$ServerNode.AppendChild($serverproperties)
-
-    if($ParentGroupName){
-        $ParentGroup = @($xml.RDCMan.file.group) | Where-Object -FilterScript {
-            $_.properties.name -eq $ParentGroupName
-            }
-        $group = @($ParentGroup.group) | Where-Object -FilterScript {
-            $_.properties.name -eq $groupname
-            }
-        }
-    else{
-        $group = @($xml.RDCMan.file.group) | Where-Object -FilterScript {
-            $_.properties.name -eq $groupname
-            }
-        }
-    [void]$group.AppendChild($ServerNode)
-  }
-  END
-  {
-    $xml.Save($FilePath)
-  }
-}
-
-#An awful array of ANG Sites
-$ANGSites=@"
+    #An awful array of ANG Sites
+    $ANGSites=@"
 AJXX-Andrews-ANG
 AFTG-Alpena
 AVND-Bangor
